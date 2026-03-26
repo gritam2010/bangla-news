@@ -30,6 +30,11 @@ header {
   padding: 15px;
   border-radius: 10px;
 }
+
+.news img {
+  width: 100%;
+  border-radius: 10px;
+}
 </style>
 </head>
 
@@ -42,19 +47,25 @@ header {
 <div class="container">লোড হচ্ছে...</div>
 
 <script>
-const apiKey = "ed172b054e7946960b0a66991e41de9f";
+const apiKey = "Y7HkQiR0D6KgJVTYFCZz7dZibtgqbtrq_qaGQTUdPbxJIEer";
 
-fetch(`https://gnews.io/api/v4/search?q=bangladesh&lang=en&max=10&token=${apiKey}`)
+fetch(`https://api.currentsapi.services/v1/latest-news?apiKey=${apiKey}`)
 .then(res => res.json())
 .then(data => {
   let container = document.querySelector(".container");
   container.innerHTML = "";
 
-  data.articles.forEach(article => {
+  if (!data.news || data.news.length === 0) {
+    container.innerHTML = "❌ সংবাদ পাওয়া যায়নি";
+    return;
+  }
+
+  data.news.forEach(article => {
     let div = document.createElement("div");
     div.className = "news";
 
     div.innerHTML = `
+      <img src="${article.image || ''}" alt="">
       <h2>${article.title}</h2>
       <p>${article.description || "বিস্তারিত নেই"}</p>
       <a href="${article.url}" target="_blank">👉 বিস্তারিত পড়ুন</a>
